@@ -16,11 +16,13 @@ class Data {
   constructor(dep) {
     this.dep = dep;
     const delayM = this.getDelayM();
+    const routeSplit = this.dep.route.split(" ");
+    const routeNumber = routeSplit[routeSplit.length - 1]
     this.dataEString = `
       <td>
         <div class="routeContainer">
           <div class="route" style="background-color: ${this.getRouteColour()};">
-            ${this.dep.route.split(" ")[1]}
+            ${routeNumber}
           </div>
           <div class="direction"> 
             ${this.dep.direction}
@@ -59,12 +61,63 @@ class Data {
   getRouteColour() {
     switch (this.dep.type) {
       case "BUS":
-        return "#04a4f1";
+        switch (this.dep.route.split(" ")[0]) {
+          case "Bus":
+            // Regionalbus (Blå)
+            return "#007ac2";
+          
+          case "Bybus":
+            if (this.dep.route.includes("A")) {
+              // A-bybus (Rød)
+              return "#b8211c";
+            }
+            else {
+              // Bybus (Gul)
+              return "#fdae00";
+            }
+          }
+        break;
+      
+      case "EXB":
+        // X-bus (Blå)
+        return "#007ac2";
       
       case "NB":
+        // Natbus (Mørkeblå)
         return "#013e5a";
+      
+      case "TOG":
+        if (this.dep.route.includes("Togbus")) {
+          switch (this.dep.route.split(" ")[1]) {
+            case "RØD":
+              // Rød togbus (Rød)
+              return "#E83F11";
+            
+            case "GRØN": 
+              // Grøn togbus (grøn)
+              return "#47A440";
+          }
+        } 
+
+        // Ukendt tog (Hvid)???
+        return "#ffffff";
+      
+      case "IC":
+        // Intercity tog (Rød?)
+        return "#EF4130";
+      
+      case "REG":
+        // Regionaltog (Grøn)
+        return "#50B748";
+      
+      case "LET":
+        // // Letbane (Mørkeblå)
+        // return "#254A5D";
+        // Letbane (Letbane-rød - ikke rejseplanen standard)
+        return "#C5003D";
     }
 
+    // Ukendt (Hvid)
     return "#ffffff";
   }
 }
@@ -83,7 +136,7 @@ class CompactTimetableCard extends HTMLElement {
       let insertHtml = `<tr style="padding-top: 0;">${firstRow.rowElem.innerHTML}</tr>`;
 
       // Create the rest of the rows
-      for (let i = 1; i < this.config.rows; i++) {
+      for (let i = 1; i < (this.config.rows > 10 ? 10 : this.config.rows); i++) {
         const row = new Row(depState.attributes.next_departures[i * 2 - 1], depState.attributes.next_departures[i * 2]);
         insertHtml += `<tr>${row.rowElem.innerHTML}</tr>`;
       }
