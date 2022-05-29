@@ -1,1 +1,1 @@
-"# compact-timetable-card" 
+# compact-timetable-card
