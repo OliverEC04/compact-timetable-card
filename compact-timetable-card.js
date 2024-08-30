@@ -145,6 +145,7 @@ class CompactTimetableCard extends HTMLElement {
         <style>
           table {
             width: 100%;
+            margin: 10px;
           }
 
           tr {
