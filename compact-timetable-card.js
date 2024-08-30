@@ -145,7 +145,6 @@ class CompactTimetableCard extends HTMLElement {
         <style>
           table {
             width: 100%;
-            margin: 10px;
           }
 
           tr {
@@ -200,7 +199,7 @@ class CompactTimetableCard extends HTMLElement {
           }
         </style>
         <ha-card header="">
-          <div class="card-content" style="padding:0;">
+          <div class="card-content">
             <table>
               ${insertHtml}
             </table>
